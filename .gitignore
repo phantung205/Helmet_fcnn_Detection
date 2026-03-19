@@ -1,0 +1,41 @@
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+
+# ===== Virtual environment =====
+venv/
+.env
+.env/
+
+# ===== Dataset (rất quan trọng) =====
+data/raw/
+data/processed/
+
+# ===== Model files =====
+*.pt
+*.pth
+trained_models/
+
+# ===== Logs =====
+logs/
+runs/
+tensorboard_logs/
+*.log
+
+# ===== Jupyter Notebook =====
+.ipynb_checkpoints/
+
+# ===== IDE =====
+.vscode/
+.idea/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Temporary =====
+*.tmp
+*.temp
