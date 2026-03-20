@@ -1,19 +1,51 @@
 import os
 import xml.etree.ElementTree as ET
 from torch.utils.data import Dataset,DataLoader
-import cv2
+from PIL import Image
 import torch
 
 
 class HelmetDataset(Dataset):
-    def __init__(self,root,transform=None):
-        self.img_dir = os.path.join(root,"images")
-        self.label_dir = os.path.join(root,"labels")
+    def __init__(self,root,is_train=True,transform=None):
+        if is_train:
+            mode = "train"
+        else:
+            mode = "val"
+
+        root_mode = os.path.join(root,mode)
+
+        self.img_dir = os.path.join(root_mode,"images")
+        self.label_dir = os.path.join(root_mode,"labels")
 
         self.transform = transform
 
         # save a list of valid files
-        self.files = os.listdir(self.img_dir)
+        self.files = []
+        for f in os.listdir(self.img_dir):
+            if not f.endswith((".png", ".jpg", ".jpeg")):
+                continue
+
+            img_path = os.path.join(self.img_dir, f)
+
+            try:
+                img = Image.open(img_path)
+                img.verify()
+            except:
+                continue
+
+            xml_path = os.path.join(
+                self.label_dir,
+                os.path.splitext(f)[0] + ".xml"
+            )
+
+            if not os.path.exists(xml_path):
+                continue
+
+            boxes, _ = self.parse_xml(xml_path)
+            if len(boxes) == 0:
+                continue
+
+            self.files.append(f)
 
     def __len__(self):
         return len(self.files)
@@ -23,11 +55,10 @@ class HelmetDataset(Dataset):
 
         # read image
         img_path = os.path.join(self.img_dir,file)
-        image = cv2.imread(img_path)
-        image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+        image = Image.open(img_path).convert("RGB")
 
         # read labels
-        label_name = file.replace(".png", ".xml")
+        label_name = os.path.splitext(file)[0] + ".xml"
         xml_path = os.path.join(self.label_dir,label_name)
         boxes,labels = self.parse_xml(xml_path)
 

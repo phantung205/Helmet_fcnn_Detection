@@ -11,8 +11,6 @@ image_raw_dir = os.path.join(data_dir,"raw","images")
 anno_raw_dir = os.path.join(data_dir,"raw","annotations")
 # path data processed
 data_processed_dir = os.path.join(data_dir,"processed")
-processed_train = os.path.join(data_processed_dir,"train")
-processed_val = os.path.join(data_processed_dir,"val")
 #split data
 splits = ["train","val"]
 train_ratio = 0.8
@@ -22,6 +20,15 @@ categories = ["Without Helmet","With Helmet"]
 
 batch_size = 4
 num_worker=2
+learning_rate = 1e-3
+momentum = 0.9
+num_epochs = 100
+
+report_dir = os.path.join(base_dir,"reports")
+path_tensorboard = os.path.join(report_dir,"tensorboard")
+
+
+model_dir = os.path.join(base_dir,"trained_models")
 
 
 
