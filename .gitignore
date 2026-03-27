@@ -1,41 +1,73 @@
-# ===== Python =====
+# ========================
+# 🔹 Python
+# ========================
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
-*.py.class
+*.so
+*.egg-info/
+dist/
+build/
 
-# ===== Virtual environment =====
+# ========================
+# 🔹 Virtual environment
+# ========================
 venv/
-.env
 .env/
+.envrc/
+*.env
 
-# ===== Dataset (rất quan trọng) =====
+# ========================
+# 🔹 IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ========================
+# 🔹 Data (RAW & PROCESSED)
+# ========================
 data/raw/
 data/processed/
 
-# ===== Model files =====
+# Nếu muốn giữ structure thì dùng:
+# !data/raw/.gitkeep
+# !data/processed/.gitkeep
+
+# ========================
+# 🔹 Test images (optional)
+# ========================
+data/test/
+# nếu muốn giữ 1 ảnh demo:
+# !data/test/sample.jpg
+
+# ========================
+# 🔹 Model weights
+# ========================
+trained_models/
 *.pt
 *.pth
-trained_models/
 
-# ===== Logs =====
-logs/
+# ========================
+# 🔹 Results / Predictions
+# ========================
+results/
+
+# ========================
+# 🔹 Tensorboard logs
+# ========================
 runs/
-tensorboard_logs/
+reports/tensorboard/
+
+# ========================
+# 🔹 Logs
+# ========================
 *.log
 
-# ===== Jupyter Notebook =====
-.ipynb_checkpoints/
-
-# ===== IDE =====
-.vscode/
-.idea/
-
-# ===== OS =====
+# ========================
+# 🔹 OS files
+# ========================
 .DS_Store
 Thumbs.db
-
-# ===== Temporary =====
-*.tmp
-*.temp

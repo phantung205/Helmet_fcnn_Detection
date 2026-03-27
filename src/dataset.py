@@ -81,7 +81,7 @@ class HelmetDataset(Dataset):
         for obj in root.findall("object"):
             name = obj.find("name").text
 
-            label = 0 if name == "Without Helmet" else 1
+            label = 1 if name == "Without Helmet" else 2
 
             b = obj.find("bndbox")
             xmin = int(b.find("xmin").text)
@@ -89,8 +89,9 @@ class HelmetDataset(Dataset):
             xmax = int(b.find("xmax").text)
             ymax = int(b.find("ymax").text)
 
-            boxes.append([xmin, ymin, xmax, ymax])
-            labels.append(label)
+            if xmax > xmin and ymax > ymin:
+                boxes.append([xmin, ymin, xmax, ymax])
+                labels.append(label)
         return boxes,labels
 
 

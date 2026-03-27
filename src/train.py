@@ -31,14 +31,23 @@ def train(args):
 
     # use model faster cnn
     model = fasterrcnn_mobilenet_v3_large_320_fpn(weights=FasterRCNN_MobileNet_V3_Large_320_FPN_Weights.DEFAULT,
-                                                  trainable_backbone_layers=0)
+                                                  trainable_backbone_layers=config.train_backbone)
     # replace num class for faster cnn train to num class for data helmet
     in_channels =  model.roi_heads.box_predictor.cls_score.in_features
     model.roi_heads.box_predictor = FastRCNNPredictor(in_channels=in_channels,
-                                                      num_classes=len(config.categories))
+                                                      num_classes=len(config.categories)+1)
     model.to(device)
 
-    optimizer = torch.optim.SGD(params=model.parameters(), lr=args.learning_rate, momentum=args.momentum)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=5e-5,
+        weight_decay=1e-4
+    )
+    scheduler = torch.optim.lr_scheduler.StepLR(
+        optimizer,
+        step_size=20,
+        gamma=0.1
+    )
 
     # load model
     if args.saved_checkpoint:
@@ -47,6 +56,7 @@ def train(args):
         optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         start_epoch = checkpoint["epoch"]
         best_map = checkpoint["map"]
+        print(start_epoch)
     else:
         start_epoch = 0
         best_map = -1
@@ -63,7 +73,7 @@ def train(args):
     writer = SummaryWriter(args.log_folder)
 
     num_iters_per_epoch = len(train_dataloader)
-    for epoch in range(args.num_epochs):
+    for epoch in range(start_epoch,args.num_epochs):
         #training
         model.train()
         progress_bar = tqdm(train_dataloader,colour="cyan")
@@ -79,6 +89,10 @@ def train(args):
             #backward
             optimizer.zero_grad()
             final_losses.backward()
+
+            # 🔥 chống nổ gradient
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
+
             optimizer.step()
 
             train_loss.append(final_losses.item())
@@ -87,6 +101,8 @@ def train(args):
             progress_bar.set_description("epoch {}/{}. loss {:0.4f}".format(epoch+1,args.num_epochs,mean_loss))
 
             writer.add_scalar("train/loss",mean_loss,epoch*num_iters_per_epoch + iter)
+        # 🔥 update learning rate
+        scheduler.step()
 
         model.eval()
         progress_bar = tqdm(val_dataloader,colour="yellow")

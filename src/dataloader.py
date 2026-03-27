@@ -22,9 +22,17 @@ def helmet_dataloader(root,batch_size,num_workers=config.num_worker):
             hue=0.05
         ),
         ToTensor(),
+        Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
     ])
     transform_val = Compose([
-        ToTensor()
+        ToTensor(),
+        Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
     ])
     # data train
     train_dataset = HelmetDataset(root=root,is_train=True,transform=transform_train)
