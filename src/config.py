@@ -13,6 +13,7 @@ anno_raw_dir = os.path.join(data_dir,"raw","annotations")
 data_processed_dir = os.path.join(data_dir,"processed")
 #path image test
 image_test = os.path.join(data_dir,"test","t.jpg")
+video_test = os.path.join(data_dir,"test","p3.mp4")
 
 #----------------------
 #save result image and video
@@ -32,7 +33,7 @@ num_worker=2
 learning_rate = 1e-4
 momentum = 0.9
 num_epochs = 100
-train_backbone = 4
+train_backbone = 5
 
 #-----------------------
 # directory report

@@ -10,7 +10,7 @@ import os
 def get_args():
     parser = argparse.ArgumentParser(description="inference mode faster cnn")
     parser.add_argument("--image_path","-i",type=str,default=config.image_test,help="path to test image")
-    parser.add_argument("--video_path","-v",type=str,default=None,help="path to test video")
+    parser.add_argument("--video_path","-v",type=str,default=config.video_test,help="path to test video")
     parser.add_argument("--checkpoint","-c",type=str,default=config.checkpoint_best)
     parser.add_argument("--conf_threshold",type=float,default=0.5)
     args = parser.parse_args()
