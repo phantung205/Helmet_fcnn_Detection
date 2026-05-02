@@ -90,7 +90,7 @@ def train(args):
             optimizer.zero_grad()
             final_losses.backward()
 
-            # 🔥 chống nổ gradient
+            # chống nổ gradient
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
 
             optimizer.step()
@@ -101,7 +101,7 @@ def train(args):
             progress_bar.set_description("epoch {}/{}. loss {:0.4f}".format(epoch+1,args.num_epochs,mean_loss))
 
             writer.add_scalar("train/loss",mean_loss,epoch*num_iters_per_epoch + iter)
-        # 🔥 update learning rate
+        # update learning rate
         scheduler.step()
 
         model.eval()

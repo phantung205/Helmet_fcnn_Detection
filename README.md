@@ -37,6 +37,9 @@ helmet_detection/
 ├── src
 └── trained_models
 ```
+
+---
+
 ## 4 Dataset
 
 ### 4.1 Tải dữ liệu
@@ -50,6 +53,12 @@ helmet_detection/
 ```text
 data/raw/
 ```
+2. chia dữ liệu thành đúng dữ liệu đang cần
+```bash
+python -m src.split_data
+```
+
+---
 
 ## 5. Cài đặt
 
@@ -76,6 +85,8 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+---
 
 ## 6. chỉnh cấu hình tham số mặc định
 ```text
@@ -104,7 +115,7 @@ trained_models/last_cnn.pt
 ```bash
 docker build -t helmet .
 
-docker run  --rm -v ${PWD}/data:/Helmet/data -v ${PWD}/trained_models:/Helmet/trained_models helmet 
+docker run  --rm --gpus all -v ${PWD}/data:/Helmet/data -v ${PWD}/trained_models:/Helmet/trained_models helmet 
 ```
 
 ## 9. xem quá trình train và triển khai test thử
